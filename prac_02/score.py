@@ -8,6 +8,7 @@ import random
 
 
 def main():
+    """Take scores and display results."""
     score = get_score()
     result = determine_result(score)
     print("Result:", result)

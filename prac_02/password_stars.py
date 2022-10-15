@@ -2,19 +2,20 @@
 Password verification program with functions
 """
 
+MINIMUM = 10
+
 
 def main():
-    """Program to verify password length"""
-    minimum = 10
-    password_attempt = get_password()
-    while len(password_attempt) < minimum:
-        print("Password must be at least 10 characters")
-        password_attempt = input("Enter password: ")
+    """Verify password length."""
+    password_attempt = get_password(MINIMUM)
     print_asterisks(password_attempt)
 
 
-def get_password():
+def get_password(minimum):
     password_attempt = input("Enter password: ")
+    while len(password_attempt) < minimum:
+        print("Password must be at least 10 characters")
+        password_attempt = input("Enter password: ")
     return password_attempt
 
 

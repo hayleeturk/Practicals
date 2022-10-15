@@ -8,6 +8,7 @@ MENU = "(R)esult\n(P)rint stars\n(Q)uit"
 
 
 def main():
+    """Determine result and display score as asterisks."""
     print(MENU)
     choice = input(">>>").upper()
     while choice != "Q":
@@ -23,15 +24,6 @@ def main():
         print(MENU)
         choice = input(">>>").upper()
     print("Finished")
-
-
-
- # score = get_valid_score()
- #        result = determine_result(score)
- #        stars = get_stars(score)
- #        print(f"Result: {result}\n{stars}")
-
-
 
 
 def get_valid_score():
