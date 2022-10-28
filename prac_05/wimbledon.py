@@ -1,6 +1,8 @@
 """
 CP1404 Practical
 Read from file and display data
+Estimated time:
+Actual time:
 """
 
 FILENAME = "wimbledon.csv"

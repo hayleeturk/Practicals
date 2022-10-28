@@ -1,18 +1,20 @@
 """
 CP1404 Practical
 Hexadecimal colour codes
+Estimated time:
+Actual time:
 """
 
-hexadecimal_to_colour = {"Asparagus": "#87a96b", "Banana Yellow": "#ffe135", "Camel": "#c19a6b",
-                         "Dogwood Rose": "#d71868", "Ebony": "#555d50", "Eggplant": "#614051",
-                         "Eggshell": "#f0ead6", "Fuzzy Wuzzy": "#87421f", "Green Lizard": "#a7f432",
-                         "Macaroni and Cheese": "#ffbd88", "Piggy Pink": "#fddde6", "Razzmatazz": "#e3256b"}
+hexadecimal_to_colour = {"asparagus": "#87a96b", "banana yellow": "#ffe135", "camel": "#c19a6b",
+                         "dogwood rose": "#d71868", "ebony": "#555d50", "eggplant": "#614051",
+                         "eggshell": "#f0ead6", "fuzzy wuzzy": "#87421f", "green lizard": "#a7f432",
+                         "macaroni and cheese": "#ffbd88", "piggy pink": "#fddde6", "razzmatazz": "#e3256b"}
 
-colour_name = str(input("Enter colour name: ").title())
+colour_name = input("Enter colour name: ").lower()
 while colour_name != "":
     if colour_name in hexadecimal_to_colour:
         print(f"{colour_name} is {hexadecimal_to_colour[colour_name]}")
     else:
         print("Invalid colour!")
-    colour_name = str(input("Enter colour name: ").title())
+    colour_name = input("Enter colour name: ").lower()
 print("Finished")
