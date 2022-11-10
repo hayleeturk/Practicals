@@ -1,6 +1,6 @@
 # CP1404 Programming II Practicals 2022
 
-By: _Haylee Turk_, 1st Year Bachelor of Information Technology, JCU
+By: _Haylee Turk_, 1st Year Bachelor of Information Technology at James Cook University
 
 This repository contains practical folders for CP1404. Each folder contains files with answers for weekly
 practicals.
@@ -13,7 +13,8 @@ practicals.
 - Only include comments in your code when necessary, not for obvious or self-explanatory lines of code.
 
 Link to "Programming Patterns" on Github:
-'https://github.com/CP1404/Starter/wiki/Programming-Patterns'
+https://github.com/CP1404/Starter/wiki/Programming-Patterns
+
 Link to "CP1404/CP5632 Practicals" on Github:
-'https://github.com/CP1404/Practicals'
+https://github.com/CP1404/Practicals
 
