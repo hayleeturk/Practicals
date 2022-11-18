@@ -36,3 +36,7 @@ class Guitar:
     def __lt__(self, other):
         """Sort guitars by year released"""
         return self.year < other.year
+
+    def __repr__(self):
+        """Return representation of object"""
+        return f"{self.name} ({self.year} : ${self.cost})"
