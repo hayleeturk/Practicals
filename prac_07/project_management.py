@@ -21,7 +21,8 @@ def main():
     projects = []
     while menu_choice != "Q":
         if menu_choice == "L":
-            filename = input("Enter file name: ")
+            # filename = input("Enter file name: ")
+            filename = "projects.txt"
             projects = load_projects(filename, projects)
         elif menu_choice == "S":
             save_projects(projects)
@@ -30,7 +31,8 @@ def main():
             completed_projects = determine_status(projects)
             display_projects(projects, completed_projects)
         elif menu_choice == "F":
-            filter_by_date(projects)
+           filtered_projects = filter_by_date(projects)
+           display_filtered_projects(filtered_projects)
         elif menu_choice == "A":
             get_new_project(projects)
         elif menu_choice == "U":
@@ -124,26 +126,32 @@ def save_projects(projects):
 
 def filter_by_date(projects):
     """Display only projects that start after a specified date, sorted by date."""
-    date = input("Show projects that start after date (dd/mm/yy): ")
+    filtered_date = input("Show projects that start after date (dd/mm/yyyy): ")
+    filtered_date = str_to_date(filtered_date)
+    filtered_projects = []
     for project in projects:
-        date_objects = str_to_date(project.date)
-        # date_object = str_to_date(date)
-    filtered_projects = [project for project in projects if date_objects > date]
-    print(filtered_projects)
-    # print(sorted(filtered_projects, key=attrgetter("date")))
-    #     if date > filtered_date:
-    #         print(project)
+        project.date = str_to_date(project.date)  # converts date strings to objects
+        if project.date >= filtered_date:
+            filtered_projects.append(project)
+    return filtered_projects
 
 
 def str_to_date(date):
     """Convert date string to date object."""
-    date_object = datetime.datetime.strptime(date, "%d/%m/%y").date()
+    date_object = datetime.datetime.strptime(date, "%d/%m/%Y").date()
     return date_object
+
+
+def display_filtered_projects(filtered_projects):
+    """Display sorted, filtered projects."""
+    for project in sorted(filtered_projects, key=attrgetter("date")):
+        project.date = date_to_str(project.date)
+        print(project)
 
 
 def date_to_str(date):
     """Convert date object to string."""
-    return date.strftime("%d/%m/%y")
+    return date.strftime("%d/%m/%Y")
 
 
 main()
