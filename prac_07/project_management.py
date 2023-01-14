@@ -2,12 +2,12 @@
 CP1404 Practical 7
 Project management program
 Estimated time: 2 hours
-Actual time:
+Actual time: 6 Hours
 """
 
-from prac_07.project import Project
 import datetime
 from operator import attrgetter
+from prac_07.project import Project
 
 FILENAME = "projects.txt"
 MENU = "(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects by date\n(A)dd new project\n(U)pdate " \
@@ -17,16 +17,16 @@ MENU = "(L)oad projects\n(S)ave projects\n(D)isplay projects\n(F)ilter projects 
 def main():
     """Load and save a data file and use a list of Project objects."""
     print(MENU)
-    menu_choice = input(">>>").upper()
     projects = []
+    load_projects(projects, FILENAME)
+    menu_choice = input(">>>").upper()
     while menu_choice != "Q":
         if menu_choice == "L":
-            filename = input("Enter file name: ")
-            projects = load_projects(filename, projects)
+            get_valid_filename(projects)
         elif menu_choice == "S":
-            save_projects(filename, projects)
+            save_projects(projects)
         elif menu_choice == "D":
-            projects.sort(key=attrgetter("date"))
+            projects.sort(key=attrgetter("priority"))
             completed_projects = determine_status(projects)
             display_projects(projects, completed_projects)
         elif menu_choice == "F":
@@ -38,10 +38,10 @@ def main():
             update_project(projects)
         print(MENU)
         menu_choice = input(">>>").upper()
-    print("Finished")
+    print("Thank you for using custom-built project management software.")
 
 
-def load_projects(filename, projects):
+def load_projects(projects, filename):
     """Load projects from specified file."""
     with open(filename, "r", encoding="utf-8") as in_file:
         in_file.readline()
@@ -81,9 +81,9 @@ def get_new_project(projects):
     """Take user input to add new project."""
     name = input("Name: ").title()
     date = get_date()
-    priority = int(input("Priority: "))
-    cost = float(input("Cost estimate: "))
-    percentage = int(input("Percentage complete: "))
+    priority = get_valid_number("Priority: ", 1, 10)
+    cost = get_valid_price()
+    percentage = get_valid_number("Percent complete: ", 0, 100)
     new_project = Project(name, date, priority, cost, percentage)
     projects.append(new_project)
 
@@ -92,9 +92,10 @@ def get_date():
     """Get start date from user and return formatted date. """
     date_choice = input("Set start date as today? (Y/N): ").upper()
     if date_choice == "Y":
-        date = datetime.datetime.now()
+        date = date_to_str(datetime.datetime.now())
     else:
-        date = check_valid_date("Start date (d/m/yyyy): ")
+        get_valid_date("Start date (d/m/yyyy): ")
+        date = date_to_str(datetime.datetime.now())
     return date
 
 
@@ -104,21 +105,17 @@ def update_project(projects):
         print(i, project)
     project_choice = get_valid_project(projects)
     print(projects[project_choice])
-    new_percentage = int(input("New percentage: "))
-    while new_percentage == "":
-        new_percentage = int(input("New percentage: "))
+    new_percentage = get_valid_number("Percent complete: ", 0, 100)
     projects[project_choice].percentage = new_percentage
-    new_priority = int(input("New priority: "))
-    while new_priority == "":
-        new_priority = int(input("New priority: "))
+    new_priority = get_valid_number("Priority: ", 1, 10)
     projects[project_choice].priority = new_priority
 
 
-def save_projects(filename, projects):
+def save_projects(projects):
     """Save projects to chosen file."""
-    filename = input("Enter file name: ")
+    filename = get_valid_string()
     with open(filename, "w", encoding="utf-8") as out_file:
-        print(f"Name\tStart\tDate\tPriority\tCost\tEstimate\tCompletion\tPercentage", file=out_file)
+        print("Name\tStart\tDate\tPriority\tCost\tEstimate\tCompletion\tPercentage", file=out_file)
         for project in projects:
             print(f"{project.name}\t{project.date}\t{project.priority}\t{project.cost}\t{project.percentage}",
                   file=out_file)
@@ -126,11 +123,13 @@ def save_projects(filename, projects):
 
 def filter_by_date(projects):
     """Display only projects that start after a specified date, sorted by date."""
-    filtered_date = check_valid_date("Show projects that start after date (dd/mm/yyyy): ")
+    filtered_date = get_valid_date("Show projects that start after date (dd/mm/yyyy): ")
     filtered_date = str_to_date(filtered_date)
     for project in projects:
         project.date = str_to_date(project.date)  # converts date strings to objects
     filtered_projects = [project for project in projects if project.date >= filtered_date]
+    for project in projects:
+        project.date = date_to_str(project.date)
     return filtered_projects
 
 
@@ -143,7 +142,6 @@ def str_to_date(date):
 def display_filtered_projects(filtered_projects):
     """Display sorted, filtered projects."""
     for project in sorted(filtered_projects, key=attrgetter("date")):
-        project.date = date_to_str(project.date)
         print(project)
 
 
@@ -152,7 +150,7 @@ def date_to_str(date):
     return date.strftime("%d/%m/%Y")
 
 
-def check_valid_date(prompt):
+def get_valid_date(prompt):
     """Check date is valid."""
     is_valid = False
     while not is_valid:
@@ -174,4 +172,56 @@ def get_valid_project(projects):
     return project_choice
 
 
-main()
+def get_valid_number(prompt, minimum, maximum):
+    """Get a valid integer from user."""
+    is_valid_input = False
+    while not is_valid_input:
+        try:
+            number = int(input(prompt))
+            while number < minimum or number > maximum:
+                print("Invalid number")
+                number = int(input(prompt))
+            is_valid_input = True
+        except ValueError:
+            print("Invalid input; enter a valid number")
+    return number
+
+
+def get_valid_filename(projects):
+    """Check filename is valid."""
+    is_valid_filename = False
+    while not is_valid_filename:
+        filename = get_valid_string()
+        try:
+            load_projects(projects, filename)
+            is_valid_filename = True
+        except FileNotFoundError:
+            print("File does not exist")
+
+
+def get_valid_string():
+    """Get a valid string from user."""
+    filename = input("Enter filename: ")
+    while filename == "":
+        print("Filename cannot be blank")
+        filename = input("Enter filename: ")
+    return filename
+
+
+def get_valid_price():
+    """Check price is a valid number."""
+    is_valid_price = False
+    while not is_valid_price:
+        try:
+            cost = float(input("Cost estimate: "))
+            while cost < 0:
+                print("Cost must be >= $0")
+                cost = float(input("Cost estimate: "))
+            is_valid_price = True
+        except ValueError:
+            print("Invalid input; enter a valid number")
+    return cost
+
+
+if __name__ == "__main__":
+    main()
