@@ -8,7 +8,7 @@ class UnreliableCar(Car):
     """Unreliable version of a Car."""
 
     def __init__(self, name, fuel, reliability=0.0):
-        """Initialise a Taxi instance, based on parent class Car."""
+        """Initialise an UnreliableCar instance, based on parent class Car."""
         super().__init__(name, fuel)
         self.reliability = reliability
 
